@@ -6,8 +6,7 @@
     <title>UC CMP V3 TCF</title>
     
 <script src="https://web.cmp.usercentrics.eu/tcf/stub.js"></script>
-<script src="https://web.cmp.usercentrics.eu/gpp/stub.js"></script>
-    <!-- TCF and GPP eventlisteners -->
+    <!-- TCF and GPP eventlisteners. No GPP stub here: with a TCF configuration it stays "not ready" and blocks GPT (CTS-3606) -->
     <script>
 __tcfapi('addEventListener', 2, function(tcData, success) {
     if (success) {
@@ -16,11 +15,17 @@ __tcfapi('addEventListener', 2, function(tcData, success) {
         console.log('tcf error');
     }
 });
-__gpp('addEventListener', function(data, success) {
-    if (success) {
-        console.log('gppEvent', data);
+window.addEventListener('load', function () {
+    if (typeof __gpp === 'function') {
+        __gpp('addEventListener', function(data, success) {
+            if (success) {
+                console.log('gppEvent', data);
+            } else {
+                console.log('gpp error');
+            }
+        });
     } else {
-        console.log('gpp error');
+        console.log('__gpp not available');
     }
 });
     </script>
