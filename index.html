@@ -6,7 +6,37 @@
     <title>UC CMP V3 TCF</title>
     
 <script src="https://web.cmp.usercentrics.eu/tcf/stub.js"></script>
-    <script id="usercentrics-cmp" src="https://web.cmp.usercentrics.eu/ui/loader.js" data-settings-id="A2eCZhp3NLZzuC" async></script>    
+<script src="https://web.cmp.usercentrics.eu/gpp/stub.js"></script>
+    <!-- TCF and GPP eventlisteners -->
+    <script>
+__tcfapi('addEventListener', 2, function(tcData, success) {
+    if (success) {
+        console.log('tcfEvent', tcData);
+    } else {
+        console.log('tcf error');
+    }
+});
+__gpp('addEventListener', function(data, success) {
+    if (success) {
+        console.log('gppEvent', data);
+    } else {
+        console.log('gpp error');
+    }
+});
+    </script>
+    <!-- End TCF and GPP eventlisteners -->
+    <script id="usercentrics-cmp" src="https://web.cmp.usercentrics.eu/ui/loader.js" data-settings-id="A2eCZhp3NLZzuC" async></script>
+    <!-- GPT test setup -->
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script>
+      window.googletag = window.googletag || {cmd: []};
+      googletag.cmd.push(function() {
+        googletag.defineSlot('/6355419/Travel/Europe/France/Paris', [300, 250], 'test-ad-container')
+                 .addService(googletag.pubads());
+        googletag.enableServices();
+      });
+    </script>
+    <!-- End GPT test setup -->
   <!-- Google Analytics -->
     <script type="text/plain" data-usercentrics="Google Analytics">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -37,9 +67,41 @@
     <h1>UC CMP V3 TCF</h1>
     <h3>UC TCF Embed</h3>
     <a href="#" onClick="window.__ucCmp.showSecondLayer()">Privacy Settings</a>
+    <button onClick="clearAllStorage()">Delete all storage</button>
+    <script>
+function clearAllStorage() {
+    var host = location.hostname;
+    var domains = ['', host, '.' + host];
+    var paths = ['/', location.pathname, location.pathname.replace(/[^\/]*$/, '')];
+    document.cookie.split(';').forEach(function (c) {
+        var name = c.split('=')[0].trim();
+        if (!name) return;
+        domains.forEach(function (d) {
+            paths.forEach(function (p) {
+                document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + p + (d ? '; domain=' + d : '');
+            });
+        });
+    });
+    localStorage.clear();
+    sessionStorage.clear();
+    var idb = (window.indexedDB && indexedDB.databases) ? indexedDB.databases() : Promise.resolve([]);
+    idb.then(function (dbs) {
+        dbs.forEach(function (db) { indexedDB.deleteDatabase(db.name); });
+    }).finally(function () {
+        console.log('All cookies, localStorage, sessionStorage and IndexedDB deleted');
+        location.reload();
+    });
+}
+    </script>
 <div class="uc-embed-tcf" uc-embed-type="vendors" uc-embed-show-toggle="true" style="width: 600px;"></div>
         <h3>UC Matrix Embed</h3>
 <div class="uc-embed-tracker" uc-embed-type="matrix" style="width: 1000px;"></div>
+    <h3>GPT Test Ad</h3>
+    <div id="test-ad-container" style="width: 300px; height: 250px; border: 1px solid #ccc;">
+      <script>
+        googletag.cmd.push(function() { googletag.display('test-ad-container'); });
+      </script>
+    </div>
     <img src="https://usercentrics.com/wp-content/uploads/2020/04/190208-UCS-Logo-800px.png" alt="uc-logo">
 </body>
 </html>
